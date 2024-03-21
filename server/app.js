@@ -23,8 +23,9 @@ async function main() {
   await mongoose.connect(mongoDB);
 }
 
-app.use(cors());
-
+app.use(cors({
+  origin: 'http://localhost:5173'
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/file', express.static("files"));
+app.use('/users', express.static("pdfs"));
 
 
 app.use('/', indexRouter);

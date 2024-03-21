@@ -1,9 +1,17 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const { isAuthenticated } = require('../middleware/authMiddleware'); 
+const router = express.Router();
+const user_controller = require('../controllers/userAuth');
+const pdfController = require('../controllers/pdfController');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+
+router.post('/signup', user_controller.signUp);
+router.post('/login', user_controller.userLogin);
+router.post('/upload-pdf', isAuthenticated, pdfController.uploadPdf);
+router.get('/user-pdfs', isAuthenticated, pdfController.getUserPdfs);
+
+module.exports = router;
+
+
 
 module.exports = router;

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Document, Page } from 'react-pdf';
 import { PDFDocument } from 'pdf-lib';
+import axios from 'axios';
+
 
 function PdfComp(props) {
     const [numPages, setNumPages] = useState();
@@ -39,12 +41,47 @@ function PdfComp(props) {
         }
 
         const pdfBytes = await newPdfDoc.save();
-        // Create a Blob and download the PDF
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = 'new-pdf-file.pdf';
         link.click();
+
+        try {
+            const authToken = localStorage.getItem('authToken');   
+            const formData = new FormData();
+            formData.append('file', new Blob([pdfBytes], { type: 'application/pdf' }), 'new-pdf-file.pdf');
+
+              
+            const response = await axios.post('http://localhost:3000/users/upload-pdf', formData, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'multipart/form-data',   
+                },
+            });
+
+              
+            if (response.status === 200) {
+                console.log('PDF successfully uploaded and associated with the user');
+                  
+            }
+        } catch (error) {
+            if (error.response) {
+                  
+                  
+                console.error("Error data:", error.response.data);
+                console.error("Error status:", error.response.status);
+                console.error("Error headers:", error.response.headers);
+            } else if (error.request) {
+                  
+                console.error("Error request:", error.request);
+            } else {
+                  
+                console.error("Error message:", error.message);
+            }
+            alert('An error occurred while uploading the PDF.');
+        }
+
     }
 
     return (
