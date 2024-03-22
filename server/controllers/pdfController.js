@@ -22,7 +22,6 @@ exports.uploadPdf = [
     upload,
     async (req, res) => {
 
-        console.log('req.user:', req.user);
 
         if (!req.file) {
             return res.status(400).send('No file uploaded.');
@@ -31,7 +30,6 @@ exports.uploadPdf = [
         try {
                
             if (!req.user || !req.user._id) {
-                console.log('Authentication failed. User information is not available.');
                 return res.status(403).send('Authentication failed.');
             }
 
@@ -42,11 +40,9 @@ exports.uploadPdf = [
             });
 
             await newPdfFile.save();
-            console.log("User ID:", req.user._id);
-            console.log("File path:", req.file.path);
+   
             res.status(201).json({ message: 'PDF successfully uploaded', pdfFile: newPdfFile });
         } catch (error) {
-            console.log("Error details:", error);
             res.status(500).json({ message: 'Error saving PDF file', error: error });
         }
     }
