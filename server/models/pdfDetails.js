@@ -9,3 +9,4 @@ const PdfDetailsSchema = new mongoose.Schema(
 );
 
 mongoose.model("PdfDetails", PdfDetailsSchema);
+module.exports = PdfDetails; 
