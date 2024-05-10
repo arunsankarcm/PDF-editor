@@ -144,7 +144,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd vidyalai
+  cd project
 ```
 
 Install dependencies
